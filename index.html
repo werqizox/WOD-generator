@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<link rel="manifest" href="manifest.json">
+<title>WOD Randomizer</title>
+<style>
+:root{--bg:#08090d;--panel:#11131a;--panel2:#181b24;--line:#292d38;--text:#f6f7fb;--muted:#9299a8;--accent:#8d6cff;--accent2:#b29dff;--green:#45df78;--orange:#ffad42}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#251d46 0,#0d0e14 32%,var(--bg) 62%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,Arial,sans-serif;min-height:100vh}button,input{font:inherit;color:inherit}button{cursor:pointer}button:active{transform:scale(.98)}
+.app{max-width:620px;margin:auto;padding:18px 16px 44px}header{padding:8px 2px 18px}.eyebrow{font-size:10px;letter-spacing:2.5px;font-weight:900;color:var(--accent2)}h1{font-size:38px;letter-spacing:-1.8px;line-height:1;margin:7px 0}.sub{color:var(--muted);font-size:13px}
+.card,.hero{border:1px solid var(--line);border-radius:23px;background:rgba(17,19,26,.94);box-shadow:0 14px 40px #0004}.card{padding:16px;margin:12px 0}.hero{padding:20px;margin:12px 0;background:linear-gradient(145deg,#19162b,#11131a 72%);border-color:#322b4c}
+.heroTop{display:flex;justify-content:space-between;gap:12px}.badge{padding:7px 9px;border-radius:10px;background:#251f3d;color:var(--accent2);font-size:9px;font-weight:900;letter-spacing:1px;height:max-content}.hero h2{font-size:26px;margin:5px 0}.hero p{margin:0;color:var(--muted);font-size:12px}.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.chip{background:#20232d;border:1px solid #2b2f3a;padding:6px 9px;border-radius:999px;font-size:9px;font-weight:900;color:#d5d8e1}
+.sectionTitle{font-size:9px;letter-spacing:1.7px;color:var(--muted);font-weight:950;margin:3px 0 9px}.seg{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;background:#0b0d12;padding:5px;border-radius:15px;margin-bottom:14px}.seg button{border:0;background:transparent;padding:11px 7px;border-radius:11px;font-weight:900;color:var(--muted)}.seg button.active{background:#28213f;color:#fff;box-shadow:inset 0 0 0 1px #423568}.four{grid-template-columns:repeat(4,1fr)}.four button{padding:10px 4px;font-size:11px}
+.toggleRow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #20232c}.toggleRow:last-of-type{border:0}.toggleRow b{font-size:13px}.toggle{width:48px;height:28px;border:0;border-radius:20px;background:#2b2f39;padding:3px}.toggle i{display:block;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}.toggle.on{background:var(--accent)}.toggle.on i{transform:translateX(20px)}
+.addRow{display:flex;gap:7px}.addRow input{min-width:0;flex:1;background:#0d0f14;border:1px solid var(--line);border-radius:13px;padding:12px;outline:0}.smallBtn{border:0;border-radius:13px;background:#28213b;padding:0 14px;font-weight:950}.primary,.secondary{width:100%;border-radius:17px;padding:15px;font-weight:950;margin-top:9px}.primary{border:0;background:linear-gradient(135deg,#9b7cff,#7657e8);box-shadow:0 12px 28px #6e52d644}.secondary{background:#1b1e27;border:1px solid #303440}
+.exercise{display:flex;gap:11px;align-items:center;padding:13px 0;border-bottom:1px solid #232630}.exercise:last-child{border:0}.num{width:29px;height:29px;border-radius:10px;background:#211d32;color:var(--accent2);display:grid;place-items:center;font-weight:950;font-size:11px;flex:none}.grow{flex:1;min-width:0}.name{font-weight:900;font-size:14px}.meta{color:var(--muted);font-size:9px;margin-top:4px}.target{display:inline-block;margin-left:5px;padding:4px 7px;border-radius:7px;background:#272035;color:#d9ceff;font-size:8px;font-weight:950}.iconBtn{width:37px;height:37px;border:0;border-radius:12px;background:#1c1f28;font-size:18px}
+.buy,.cash{padding:14px 15px;border-radius:18px;margin:10px 0;background:#171a21;border:1px solid var(--line)}.buy{border-color:#403726}.cash{border-color:#294532}.buy span,.cash span{display:block;font-size:8px;letter-spacing:1.5px;color:var(--muted);font-weight:950}.buy strong,.cash strong{display:block;margin-top:4px;font-size:17px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:18px 0}.tab{border:1px solid var(--line);background:#101219;border-radius:14px;padding:11px 4px;font-size:10px;font-weight:950;color:var(--muted)}.tab.active{color:#fff;background:#211c32;border-color:#413660}.view{display:none}.view.active{display:block}
+.historyItem{padding:15px 0;border-bottom:1px solid #242731}.historyTop{display:flex;justify-content:space-between;align-items:center}.historyMeta{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}.mini{font-size:8px;font-weight:850;padding:5px 7px;border-radius:7px;background:#1b1e27;color:#b7bdc9}.empty{text-align:center;color:var(--muted);padding:30px 5px}.note{font-size:11px;color:var(--muted);line-height:1.45}
+</style>
+<style>
+.toolBtn{border:1px solid #303440;background:#171a21;border-radius:12px;padding:8px 10px;font-size:9px;font-weight:950;margin-top:8px}
+.iconBtn.favorite{color:#ffd45a;background:#292317}
+</style></head>
+<body>
+<div class="app">
+<header><div class="eyebrow">PERSONAL WORKOUT ENGINE</div><h1>WOD Randomizer</h1><div class="sub">Smart full-body circuits · no timer</div></header>
+
+<section id="workoutView" class="view active">
+<div class="card">
+<div class="sectionTitle">LOCATION</div>
+<div class="seg" id="locationSeg"><button class="active" data-v="gym">🏋️ GYM</button><button data-v="outdoor">🌳 OUTDOOR</button></div>
+
+<div class="sectionTitle">EXERCISES</div>
+<div class="seg four" id="countSeg"><button data-v="5">5</button><button class="active" data-v="6">6</button><button data-v="7">7</button><button data-v="8">8</button></div>
+
+<div class="sectionTitle">HIGH INTENSITY</div>
+<div class="seg four" id="hiSeg"><button data-v="1">1</button><button class="active" data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button></div>
+
+<div class="sectionTitle">INTENSITY</div>
+<div class="seg four" id="diffSeg"><button data-v="easy">EASY</button><button class="active" data-v="medium">MED</button><button data-v="hard">HARD</button><button data-v="beast">BEAST</button></div>
+
+<div class="toggleRow"><b>Buy In</b><button class="toggle on" id="buyToggle"><i></i></button></div>
+<div class="toggleRow"><b>Cash Out</b><button class="toggle on" id="cashToggle"><i></i></button></div>
+
+<div class="sectionTitle" style="margin-top:15px">AVOID TODAY</div>
+<div class="addRow"><input id="avoidInput" placeholder="pl. deadlift, burpee..."><button class="smallBtn" id="avoidAdd">ADD</button></div>
+<div id="avoidChips" class="chips"></div>
+
+<button class="primary" id="surpriseBtn">✨ SURPRISE ME</button>
+<button class="secondary" id="generateBtn">🎲 GENERATE WORKOUT</button>
+</div>
+<div id="workout"></div>
+</section>
+
+<section id="historyView" class="view"><div class="card"><div class="sectionTitle">WORKOUT HISTORY</div><div id="historyList"></div></div></section>
+<section id="exerciseView" class="view"><div class="card"><div class="sectionTitle">MY EXERCISES</div><p class="note">Adj hozzá saját gyakorlatokat. Ezek is bekerülhetnek a randomizerbe.</p><div class="addRow"><input id="customName" placeholder="Exercise name"><button class="smallBtn" id="addExercise">ADD</button></div><div id="customList"></div></div></section>
+
+<nav class="tabs"><button class="tab active" data-view="workoutView">🎲 WORKOUT</button><button class="tab" data-view="historyView">📜 HISTORY</button><button class="tab" data-view="exerciseView">＋ EXERCISES</button></nav>
+</div>
+
+<script>
+const CATS={upper:"UPPER",lower:"LOWER",hi:"HIGH INTENSITY",core:"CORE",static:"STATIC"};
+const DATA=[
+["Pull Up","upper","back","biceps"],["Chin Up","upper","biceps","back"],["Dips","upper","chest","triceps"],["Push Up","upper","chest","triceps"],["Push Press","upper","shoulders","triceps"],
+["Lateral KB Lunge","lower","glutes","adductors"],["Box Step Up","lower","glutes","quads"],["Pistol Squat","lower","quads","glutes"],["Goblet Squat","lower","quads","glutes"],["Deadlift","lower","hamstrings","glutes"],["Heavy Squat","lower","quads","glutes"],
+["Battle Rope","hi","shoulders","arms"],["Slam Ball","hi","core","shoulders"],["Burpee","hi","chest","quads"],["Box Jump","hi","quads","glutes"],["Wall Ball","hi","quads","shoulders"],["Jump Rope","hi","calves","quads"],["Row","hi","back","biceps"],["KB Swing","hi","glutes","hamstrings"],["American Swing","hi","shoulders","glutes"],["Air Bike","hi","quads","core"],
+["Wall Sit","static","quads","core"],["Plank","static","core","shoulders"],
+["Sit Up","core","abs","hip flexors"],["Leg Raise","core","abs","hip flexors"],["KB Halo","core","shoulders","core"],["Russian Twist","core","obliques","abs"],["Sitting KB Twist","core","obliques","abs"],["Kneeling KB Chop","core","obliques","shoulders"],["Banded Rotation","core","obliques","abs"],
+["Hand Release Push Up","upper","chest","triceps"],["Renegade Row","upper","back","core"],["Hip Extension","core","glutes","hamstrings"],["Thruster","lower","quads","shoulders"],["1-Handed KB Swing","hi","glutes","hamstrings"],["Mountain Climber","hi","core","quads"],["Run","hi","quads","calves"],["Sprint","hi","quads","glutes"],["Side Plank","static","obliques","core"],["Plank KB Drag","core","core","shoulders"]
+]
+const EQUIP=new Set(["Pull Up","Chin Up","Dips","Push Press","Lateral KB Lunge","Box Step Up","Goblet Squat","Deadlift","Heavy Squat","Battle Rope","Slam Ball","Box Jump","Wall Ball","Row","KB Swing","American Swing","Air Bike","KB Halo","Russian Twist","Sitting KB Twist","Kneeling KB Chop","Renegade Row","Thruster","1-Handed KB Swing","Plank KB Drag"]);
+const OUTDOOR_ONLY=new Set(["Run","Sprint"]);
+let S={count:6,hi:2,diff:"medium",location:"gym",buy:true,cash:true,avoid:[],history:[],custom:[],workout:null};
+try{S.history=JSON.parse(localStorage.getItem("wod_history_v8")||"[]");S.custom=JSON.parse(localStorage.getItem("wod_custom_v8")||"[]")}catch{}
+const $=id=>document.getElementById(id),rand=a=>a[Math.floor(Math.random()*a.length)];
+function all(){return [...DATA.map(x=>({name:x[0],cat:x[1],primary:x[2],secondary:x[3]})),...S.custom]}
+function allowed(e){if(S.avoid.some(x=>e.name.toLowerCase().includes(x.toLowerCase())))return false;if(S.location==="outdoor")return !EQUIP.has(e.name)||OUTDOOR_ONLY.has(e.name);return !OUTDOOR_ONLY.has(e.name)}
+function target(e){if(e.name==="Row"||e.name==="Air Bike"){let r={easy:[8,10],medium:[10,14],hard:[14,18],beast:[18,25]}[S.diff];return Math.round(r[0]+Math.random()*(r[1]-r[0]))+" CAL"}if(e.name==="Run")return ({easy:400,medium:600,hard:800,beast:1000})[S.diff]+" M";if(e.name==="Sprint")return ({easy:100,medium:150,hard:200,beast:250})[S.diff]+" M";return ""}
+function muscles(e){return [e.primary,e.secondary].filter(Boolean)}
+function lastUsed(name){let best=null;for(const w of S.history)for(const e of w.exercises||[])if(e.name===name){let d=Date.now()-new Date(w.date).getTime();if(best===null||d<best)best=d}if(best===null)return "";let d=Math.floor(best/86400000);return d===0?"today":d===1?"yesterday":d+"d ago"}
+function muscleConflict(a,b){if(!a||!b)return 0;let am=muscles(a),bm=muscles(b),s=0;if(a.primary&&a.primary===b.primary)s+=18;if(am.includes(b.primary))s+=11;if(bm.includes(a.primary))s+=9;if(a.secondary&&a.secondary===b.secondary)s+=5;if(am.some(x=>bm.includes(x)))s+=4;return s}
+function score(e,chosen){let s=Math.random()*6;chosen.slice(-3).forEach((p,idx)=>{const w=idx===2?1:idx===1?.65:.35;s-=muscleConflict(e,p)*w});if(chosen.length&&chosen.at(-1).cat==="hi"&&(e.cat==="core"||e.cat==="static"))s+=9;if(chosen.length&&chosen.at(-1).cat===e.cat)s-=2;if(e.cat==="core"&&!chosen.some(x=>x.cat==="core"))s+=8;if(lastUsed(e.name)==="today")s-=12;if(lastUsed(e.name)==="yesterday")s-=6;return s}
+function pick(pool,chosen){let a=pool.filter(e=>!chosen.some(x=>x.name===e.name));if(!a.length)return null;let r=a.map(e=>({e,s:score(e,chosen)})).sort((a,b)=>b.s-a.s);return rand(r.slice(0,Math.min(3,r.length))).e}
+function generate(){
+ let pool=all().filter(allowed),by={upper:pool.filter(e=>e.cat==="upper"),lower:pool.filter(e=>e.cat==="lower"),hi:pool.filter(e=>e.cat==="hi"),core:pool.filter(e=>e.cat==="core"),static:pool.filter(e=>e.cat==="static")},chosen=[];
+ let hiN=Math.min(S.hi,Math.max(1,Math.floor(S.count/2)));
+ let coreN=S.count>=7?(Math.random()<.72?2:1):(S.count===6?(Math.random()<.68?1:0):(S.count===5?(Math.random()<.42?1:0):1));
+ let remaining=S.count-hiN-coreN;
+ let counts={upper:Math.max(1,Math.round(remaining*.34)),lower:Math.max(1,Math.round(remaining*.34)),hi:hiN,core:coreN,static:0};
+ counts.static=Math.max(0,remaining-counts.upper-counts.lower);
+ while(counts.upper+counts.lower+counts.static<remaining)counts.lower++;
+ while(counts.upper+counts.lower+counts.static>remaining){if(counts.static)counts.static--;else if(counts.upper>1)counts.upper--;else counts.lower--}
+ let order=[];Object.entries(counts).forEach(([cat,n])=>{for(let i=0;i<n;i++)order.push(cat)});
+ let tries=0;do{order.sort(()=>Math.random()-.5);tries++}while(tries<40&&order.some((x,i)=>x===order[i-1]));
+ for(const cat of order){let e=pick(by[cat],chosen);if(e)chosen.push(e)}
+ while(chosen.length<S.count){let e=pick(pool,chosen);if(!e)break;chosen.push(e)}
+ for(let i=1;i<chosen.length;i++)if(chosen[i-1].cat==="hi"&&!["core","static"].includes(chosen[i].cat)){let cs=chosen.map((e,k)=>({e,k})).filter(x=>x.k>i&&(x.e.cat==="core"||x.e.cat==="static"));if(cs.length){let x=rand(cs);[chosen[i],chosen[x.k]]=[chosen[x.k],chosen[i]]}}
+ let used=new Set(chosen.map(e=>e.name)),buy=null,cash=null;
+ if(S.buy){let p=pool.filter(e=>e.cat==="hi"&&!used.has(e.name));if(p.length){buy=rand(p);used.add(buy.name)}}
+ if(S.cash){let p=pool.filter(e=>(e.cat==="hi"||e.cat==="core"||e.cat==="static")&&!used.has(e.name));if(p.length){cash=rand(p);used.add(cash.name)}}
+ S.workout={date:new Date().toISOString(),location:S.location,difficulty:S.diff,exercises:chosen,buy,cash};render()
+}
+function render(){
+ let w=S.workout;if(!w)return;let hi=w.exercises.filter(e=>e.cat==="hi").length;
+ let h=`<div class="hero"><div class="heroTop"><div><div class="eyebrow">${hi>=3?"ENGINE + CONDITIONING":"FULL BODY CIRCUIT"}</div><h2>${w.exercises.length} EXERCISES</h2><p>${w.location==="outdoor"?"Outdoor session":"Gym session"} · ${w.difficulty.toUpperCase()}</p></div><span class="badge">${w.location==="outdoor"?"OUTDOOR":"GYM"}</span></div><div class="chips"><span class="chip">${hi} HI</span><span class="chip">${w.exercises.filter(e=>e.cat==="core").length} CORE</span><span class="chip">${w.exercises.filter(e=>e.cat==="static").length} STATIC</span></div></div>`;
+ if(w.buy)h+=`<div class="buy"><span>BUY IN</span><strong>${w.buy.name}</strong></div>`;
+ h+=`<div class="card"><div class="sectionTitle">MAIN WORKOUT</div>`;
+ w.exercises.forEach((e,i)=>{let t=target(e);h+=`<div class="exercise"><div class="num">${i+1}</div><div class="grow"><div class="name">${e.name}${t?`<span class="target">${t}</span>`:""}</div><div class="meta">${CATS[e.cat]}${e.primary?` · ${e.primary}${e.secondary?` + ${e.secondary}`:""}`:""}${lastUsed(e.name)?` · last used ${lastUsed(e.name)}`:""}</div></div><button class="iconBtn" onclick="reroll(${i})">↻</button></div>`});
+ h+=`</div>`;if(w.cash)h+=`<div class="cash"><span>CASH OUT</span><strong>${w.cash.name}</strong></div>`;h+=`<button class="primary" onclick="save()">✓ SAVE WORKOUT</button><button class="secondary" onclick="generate()">🎲 REROLL WHOLE WORKOUT</button>`;$("workout").innerHTML=h
+}
+window.reroll=i=>{let old=S.workout.exercises[i],p=all().filter(e=>allowed(e)&&e.cat===old.cat&&!S.workout.exercises.some((x,k)=>k!==i&&x.name===e.name));if(!p.length)return;S.workout.exercises[i]=pick(p,S.workout.exercises.filter((x,k)=>k!==i));render()}
+function save(){if(!S.workout)return;S.history.unshift(JSON.parse(JSON.stringify(S.workout)));S.history=S.history.slice(0,100);localStorage.setItem("wod_history_v8",JSON.stringify(S.history));renderHistory()}
+window.repeat=i=>{S.workout=JSON.parse(JSON.stringify(S.history[i]));show("workoutView");render()}
+function renderHistory(){$("historyList").innerHTML=S.history.length?S.history.map((w,i)=>`<div class="historyItem"><div class="historyTop"><b>${new Date(w.date).toLocaleDateString("hu-HU")}</b><span class="mini">${w.location==="outdoor"?"OUTDOOR":"GYM"} · ${w.difficulty.toUpperCase()}</span></div><div class="historyMeta">${w.exercises.map(e=>`<span class="mini">${e.name}</span>`).join("")}</div><button class="secondary" onclick="repeat(${i})">▶ REPEAT</button></div>`).join(""):`<div class="empty">Még nincs mentett edzés.</div>`}
+function renderCustom(){$("customList").innerHTML=S.custom.length?S.custom.map((e,i)=>`<div class="exercise"><div class="grow"><div class="name">${e.name}</div><div class="meta">CUSTOM</div></div><button class="iconBtn" onclick="delCustom(${i})">×</button></div>`).join(""):`<div class="empty">Még nincs saját gyakorlat.</div>`}
+window.delCustom=i=>{S.custom.splice(i,1);localStorage.setItem("wod_custom_v8",JSON.stringify(S.custom));renderCustom()}
+function show(id){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view===id));if(id==="historyView")renderHistory();if(id==="exerciseView")renderCustom()}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>show(t.dataset.view));
+document.querySelectorAll("#locationSeg button").forEach(b=>b.onclick=()=>{S.location=b.dataset.v;document.querySelectorAll("#locationSeg button").forEach(x=>x.classList.toggle("active",x===b));generate()});
+document.querySelectorAll("#countSeg button").forEach(b=>b.onclick=()=>{S.count=+b.dataset.v;document.querySelectorAll("#countSeg button").forEach(x=>x.classList.toggle("active",x===b))});
+document.querySelectorAll("#hiSeg button").forEach(b=>b.onclick=()=>{S.hi=+b.dataset.v;document.querySelectorAll("#hiSeg button").forEach(x=>x.classList.toggle("active",x===b))});
+document.querySelectorAll("#diffSeg button").forEach(b=>b.onclick=()=>{S.diff=b.dataset.v;document.querySelectorAll("#diffSeg button").forEach(x=>x.classList.toggle("active",x===b))});
+$("buyToggle").onclick=()=>{S.buy=!S.buy;$("buyToggle").classList.toggle("on",S.buy)};$("cashToggle").onclick=()=>{S.cash=!S.cash;$("cashToggle").classList.toggle("on",S.cash)};
+function renderAvoid(){$("avoidChips").innerHTML=S.avoid.map((x,i)=>`<span class="chip" onclick="S.avoid.splice(${i},1);renderAvoid()">${x} ×</span>`).join("")}
+$("avoidAdd").onclick=()=>{let v=$("avoidInput").value.trim();if(v&&!S.avoid.includes(v))S.avoid.push(v);$("avoidInput").value="";renderAvoid()};$("generateBtn").onclick=generate;
+$("surpriseBtn").onclick=()=>{S.count=rand([5,6,7,8]);S.hi=rand([1,2,3,4]);S.diff=rand(["easy","medium","hard","beast"]);S.location=rand(["gym","outdoor"]);S.buy=Math.random()>.2;S.cash=Math.random()>.2;document.querySelectorAll("#countSeg button").forEach(b=>b.classList.toggle("active",+b.dataset.v===S.count));document.querySelectorAll("#hiSeg button").forEach(b=>b.classList.toggle("active",+b.dataset.v===S.hi));document.querySelectorAll("#diffSeg button").forEach(b=>b.classList.toggle("active",b.dataset.v===S.diff));document.querySelectorAll("#locationSeg button").forEach(b=>b.classList.toggle("active",b.dataset.v===S.location));$("buyToggle").classList.toggle("on",S.buy);$("cashToggle").classList.toggle("on",S.cash);generate()};
+$("addExercise").onclick=()=>{let v=$("customName").value.trim();if(!v)return;S.custom.push({name:v,cat:"upper",primary:"full body",secondary:"core"});localStorage.setItem("wod_custom_v8",JSON.stringify(S.custom));$("customName").value="";renderCustom()};
+renderAvoid();renderHistory();renderCustom();generate();
+</script>
+
+<script>
+/* v10 Smart layer */
+const V10={favorites:JSON.parse(localStorage.getItem("wod_favorites_v10")||"[]"),
+alwaysAvoid:JSON.parse(localStorage.getItem("wod_always_avoid_v10")||"[]")};
+function v10Save(){localStorage.setItem("wod_favorites_v10",JSON.stringify(V10.favorites));localStorage.setItem("wod_always_avoid_v10",JSON.stringify(V10.alwaysAvoid))}
+function v10Favorite(name){V10.favorites=V10.favorites.includes(name)?V10.favorites.filter(x=>x!==name):[...V10.favorites,name];v10Save();if(typeof render==="function")render()}
+function v10SmartReroll(i){
+ if(!S.workout?.exercises?.[i])return;
+ const old=S.workout.exercises[i], used=new Set(S.workout.exercises.map(x=>x.name));
+ let pool=all().filter(e=>allowed(e)&&!used.has(e.name));
+ pool=pool.filter(e=>e.cat===old.cat||Math.random()>.55);
+ if(!pool.length)return;
+ pool.sort((a,b)=>(muscleConflict(old,a)-muscleConflict(old,b))+Math.random()*8);
+ S.workout.exercises[i]=pool[0];render();
+}
+function v10Extra(kind){
+ if(!S.workout)return;
+ const used=new Set(S.workout.exercises.map(x=>x.name));
+ if(S.workout.buy)used.add(S.workout.buy.name);if(S.workout.cash)used.add(S.workout.cash.name);
+ let pool=all().filter(e=>allowed(e)&&!used.has(e.name));
+ pool=kind==="buy"?pool.filter(e=>e.cat==="hi"):pool.filter(e=>["hi","core","static"].includes(e.cat));
+ if(pool.length){S.workout[kind]=pool[Math.floor(Math.random()*pool.length)];render()}
+}
+function v10Intensity(e){return e.intensity||3}
+function v10Stats(){
+ const hs=S.history||[], ex=hs.flatMap(w=>w.exercises||[]), freq={};
+ ex.forEach(e=>freq[e.name]=(freq[e.name]||0)+1);
+ const most=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0];
+ const muscles={};ex.forEach(e=>{if(e.primary)muscles[e.primary]=(muscles[e.primary]||0)+1});
+ const mm=Object.entries(muscles).sort((a,b)=>b[1]-a[1])[0];
+ return [hs.length,ex.length,most?.[0]||"—",mm?.[0]||"—"];
+}
+function v10Patch(){
+ const workout=document.getElementById("workout");if(!workout)return;
+ // Add controls without changing the underlying layout.
+ workout.querySelectorAll(".exercise").forEach((row,i)=>{
+   const btn=document.createElement("button");btn.className="iconBtn";btn.textContent="★";
+   btn.title="Favorite";if(V10.favorites.includes(S.workout.exercises[i].name))btn.classList.add("favorite");
+   btn.onclick=()=>v10Favorite(S.workout.exercises[i].name);row.appendChild(btn);
+   const smart=document.createElement("button");smart.className="iconBtn";smart.textContent="↻";smart.title="Smart Reroll";
+   smart.onclick=()=>v10SmartReroll(i);row.appendChild(smart);
+ });
+ if(S.workout.buy){
+   const b=document.querySelector(".buy");if(b&&!b.querySelector(".v10r")){let x=document.createElement("button");x.className="toolBtn v10r";x.textContent="↻ REROLL BUY IN";x.onclick=()=>v10Extra("buy");b.appendChild(x)}
+ }
+ if(S.workout.cash){
+   const c=document.querySelector(".cash");if(c&&!c.querySelector(".v10r")){let x=document.createElement("button");x.className="toolBtn v10r";x.textContent="↻ REROLL CASH OUT";x.onclick=()=>v10Extra("cash");c.appendChild(x)}
+ }
+}
+const oldRender=window.render; if(typeof oldRender==="function")window.render=function(){oldRender();setTimeout(v10Patch,0)}
+</script>
+</body>
+</html>
